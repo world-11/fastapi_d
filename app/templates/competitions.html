@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Соревнования{% endblock %}
+
+
+{% block content %}
+<h1>Соревнования</h1>
+<br>
+<form method="POST">
+    <input type="hidden" name="add" value="1">
+    <div class="form-group">
+        <label for="title">Название</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="date">Дата</label>
+        <input type="date" class="form-control" id="date" name="date" required>
+    </div>
+    <br>
+    <button type="submit" formaction="/add_competition/" class="btn btn-primary">Добавить соревнование</button>
+</form>
+<br>
+<br>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Дата</th>
+        <th>Действия</th>
+    </tr>
+    {% for competition in competitions %}
+    <tr>
+        <td>{{ competition.id }}</td>
+        <td>{{ competition.title }}</td>
+        <td>{{ competition.date }}</td>
+        <td>
+            <form action="/delete_competition/{{ competition.id }}" method="post">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

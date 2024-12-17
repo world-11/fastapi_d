@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Участия в соревнованиях{% endblock %}
+
+{% block content %}
+<h1>Участия в соревнованиях</h1>
+<a href="/add_participation">Добавить участие</a>
+<table border="1">
+    <tr>
+        <th>ID спортсмена</th>
+        <th>ID соревнования</th>
+        <th>Действия</th>
+    </tr>
+    {% for participation in participations %}
+    <tr>
+        <td>{{ participation.athlete_id }}</td>
+        <td>{{ participation.competition_id }}</td>
+        <td>
+            <form action="/delete_participation/{{ participation.athlete_id }}/{{ participation.competition_id }}" method="post">
+                <input type="submit" value="Удалить">
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

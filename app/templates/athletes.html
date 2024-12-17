@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Спортсмены{% endblock %}
+
+{% block content %}
+<h1>Спортсмены</h1>
+<br>
+<form method="POST">
+    <input type="hidden" name="add" value="1">
+    <div class="form-group">
+        <label for="name">ФИО</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="age">Возраст</label>
+        <input type="number" class="form-control" id="age" name="age" required>
+    </div>
+    <br>
+    <button type="Submit" formaction="/add_athlete/" class="btn btn-primary">Добавить спортсмена</button>
+</form>
+<br>
+<br>
+<br>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Возраст</th>
+        <th>Действия</th>
+    </tr>
+    {% for athlete in athletes %}
+    <tr>
+        <td>{{ athlete.id }}</td>
+        <td>{{ athlete.name }}</td>
+        <td>{{ athlete.age }}</td>
+        <td>
+            <form action="/delete_athlete/{{ athlete.id }}" method="post">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

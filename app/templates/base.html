@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+<a class="nav-link" href='/get_athletes'>Спортсмены</a> |  <a class="nav-link" href='/get_competitions'>Соревнования</a>  |
+    <a href="/get_participations">Участие в соревнованиях</a>
+<br>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
