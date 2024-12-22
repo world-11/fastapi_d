@@ -85,53 +85,57 @@ def delete_competition(request: Request, comp_id: int, db: Session = Depends(get
     competition_to_delete = (
         db.query(Competition).filter(Competition.id == comp_id).first()
     )
-    db.delete(competition_to_delete)
+    if competition_to_delete:
+        db.delete(competition_to_delete)
+        db.commit()
+    return RedirectResponse(url=request.url_for("get_competitions"), status_code=303)
+
+
+# Добавление участия
+@app.post("/add_participation")
+def add_participation(
+    request: Request,
+    athlete_id: int = Form(...),
+    competition_id: int = Form(...),
+    db: Session = Depends(get_db),
+):
+    new_participation = Participation(
+        athlete_id=athlete_id, competition_id=competition_id
+    )
+    db.add(new_participation)
     db.commit()
-    return RedirectResponse(url=request.url_for("get_competitions"), status_code=200)
+    return RedirectResponse(url=request.url_for("get_participations"), status_code=303)
 
 
-# # Добавление участия
-# @app.post("/add_participation")
-# def add_participation(
-#     request: Request,
-#     athlete_id: int = Form(...),
-#     competition_id: int = Form(...),
-#     db: Session = Depends(get_db),
-# ):
-#     new_participation = Participation(
-#         athlete_id=athlete_id, competition_id=competition_id
-#     )
-#     db.add(new_participation)
-#     db.commit()
-#     return RedirectResponse(url=request.url_for("get_participations"), status_code=303)
-#
-#
-# # Удаление участников
-# @app.delete("/delete_participation/{athlete_id}/{competition_id}")
-# def delete_participation(
-#     athlete_id: int, competition_id: int, db: Session = Depends(get_db)
-# ):
-#     participation_to_delete = (
-#         db.query(Participation)
-#         .filter(
-#             Participation.athlete_id == athlete_id,
-#             Participation.competition_id == competition_id,
-#         )
-#         .first()
-#     )
-#     if participation_to_delete:
-#         db.delete(participation_to_delete)
-#         db.commit()
-#         return {"message": "Участник успешно удален!"}
-#     else:
-#         return {"error": "Участник не найден"}
-#
-#
-# # Получение списка участников
-# @app.get("/get_participations", response_class=HTMLResponse)
-# def get_participations(request: Request, db: Session = Depends(get_db)):
-#     participations = db.query(Participation).all()
-#     context = {"participations": participations}
-#     return templates.TemplateResponse(
-#         name="participations.html", request=request, context=context
-#     )
+# Удаление участников
+@app.post("/delete_participation/{athlete_id}/{competition_id}")
+def delete_participation(
+    request: Request,
+    athlete_id: int,
+    competition_id: int,
+    db: Session = Depends(get_db),
+):
+    participation_to_delete = (
+        db.query(Participation)
+        .filter(
+            Participation.athlete_id == athlete_id,
+            Participation.competition_id == competition_id,
+        )
+        .first()
+    )
+    if participation_to_delete:
+        db.delete(participation_to_delete)
+        db.commit()
+        return RedirectResponse(
+            url=request.url_for("get_participations"), status_code=303
+        )
+
+
+# Получение списка участников
+@app.get("/get_participations", response_class=HTMLResponse)
+def get_participations(request: Request, db: Session = Depends(get_db)):
+    participations = db.query(Participation).all()
+    context = {"participations": participations}
+    return templates.TemplateResponse(
+        name="participations.html", request=request, context=context
+    )

@@ -4,7 +4,24 @@
 
 {% block content %}
 <h1>Участия в соревнованиях</h1>
-<a href="/add_participation">Добавить участие</a>
+<br>
+<form method="POST">
+    <input type="hidden" name="add" value="1">
+    <div class="form-group">
+        <label for="athlete_id">ID спортсмена</label>
+        <input type="number" class="form-control" id="athlete_id" name="athlete_id" required>
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="competition_id">ID соревнований</label>
+        <input type="number" class="form-control" id="competition_id" name="competition_id" required>
+    </div>
+    <br>
+    <button type="submit" formaction="/add_participation/" class="btn btn-primary">Добавить участие</button>
+</form>
+<br>
+<br>
+<br>
 <table border="1">
     <tr>
         <th>ID спортсмена</th>
